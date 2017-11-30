@@ -26,6 +26,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         physicsWorld.gravity = CGVector(dx: 0.0, dy: -9.8)
         
         leafNode = SKNode()
+        addChild(leafNode)
         
         //背景色を設定
         backgroundColor = UIColor(colorLiteralRed: 0.15, green: 0.75, blue: 0.90, alpha: 1)
@@ -91,7 +92,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         //スプライトを追加する
         
-        leafNode.addChild(Leaf)
+        addChild(Leaf)
     }
     
     func setupKi(){
