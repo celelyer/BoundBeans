@@ -24,6 +24,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         print("Start")
         //重力を設定
         physicsWorld.gravity = CGVector(dx: 0.0, dy: -9.8)
+        physicsWorld.contactDelegate = self
         
         leafNode = SKNode()
         addChild(leafNode)
@@ -40,6 +41,26 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         print("Tap")
         mameJump()
+        
+        
+        
+         //複数本の指でタッチした場合も想定されるので、その中から指一本分の座標データを取得
+        if let touch = touches.first{
+            //スクリーン上の座標データをlocationNodeメソッドでシーン上での座標に変換
+            let location = touch.location(in: self)
+            let action = SKAction.moveTo(x: location.x, duration:1.0)
+            mame.run(action)
+        }
+        
+    }
+    
+     //ドラッグ時
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+        if let touch = touches.first{
+            let location = touch.location(in: self)
+            let action = SKAction.moveTo(x: location.x, duration: 1.0)
+            self.mame?.run(action)
+        }
     }
     
     
@@ -49,23 +70,25 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let mameTexture = SKTexture(imageNamed: "Bean")
         mameTexture.filteringMode = SKTextureFilteringMode.linear
         
-        //テクスチャを指定してスプライトを作成する
-        mame = SKSpriteNode(texture: mameTexture)
         
-        //スプライトの位置を指定する
-        mame.position = CGPoint(x: size.width / 2, y: size.height / 2)
-        mame.zPosition = 100
+        //スプライトを作成
+        mame = SKSpriteNode(texture: mameTexture)
+        mame.position = CGPoint(x: self.frame.size.width * 0.5, y: self.frame.size.height * 0.7)
         
         //物理演算を設定
         mame.physicsBody = SKPhysicsBody(circleOfRadius: mame.size.height / 2.0)
-        //衝突カテゴリ設定
-        mame.physicsBody?.categoryBitMask = mameCategory
-        //跳ね返る相手
-        mame.physicsBody?.collisionBitMask = leafCategory
-        //当たった時にdidBeginContactを呼び出す
-        mame.physicsBody?.contactTestBitMask = leafCategory
         
-        //シーンにスプライトを追加する
+        //衝突した時に回転させない
+        mame.physicsBody?.allowsRotation = false
+        
+        //衝突のカテゴリー設定
+        mame.physicsBody?.categoryBitMask = mameCategory
+        mame.physicsBody?.collisionBitMask = leafCategory //当たった時に跳ね返る相手
+        mame.physicsBody?.contactTestBitMask = leafCategory //当たった時にdidBeginContactを呼び出す
+        
+        
+        
+        //スプライトを追加する
         addChild(mame)
         
     }
@@ -92,7 +115,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         //スプライトを追加する
         
-        addChild(Leaf)
+        leafNode.addChild(Leaf)
     }
     
     func setupKi(){
@@ -131,6 +154,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             
             
             
-        }
+    }
     
 }
