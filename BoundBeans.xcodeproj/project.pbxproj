@@ -111,6 +111,7 @@
 				TargetAttributes = {
 					A52376331FCC3E5A0030CBB1 = {
 						CreatedOnToolsVersion = 8.3.3;
+						DevelopmentTeam = S2K2NE624W;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -276,6 +277,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = S2K2NE624W;
 				INFOPLIST_FILE = BoundBeans/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = jp.techacademy.mikiya.tadano.BoundBeans;
@@ -288,6 +290,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = S2K2NE624W;
 				INFOPLIST_FILE = BoundBeans/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = jp.techacademy.mikiya.tadano.BoundBeans;
@@ -315,6 +318,7 @@
 				A52376481FCC3E5A0030CBB1 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
