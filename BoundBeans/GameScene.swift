@@ -11,8 +11,9 @@ import SpriteKit
 class GameScene: SKScene, SKPhysicsContactDelegate {
     
     var mame:SKSpriteNode!
-    var baccScreenNode:SKNode!
-    
+    var backScreenNode:SKSpriteNode!
+    var Leaf:SKSpriteNode!
+    var ki:SKSpriteNode!
     
     //衝突判定カテゴリー
     let mameCategory: UInt32 = 1 << 0
@@ -23,11 +24,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     override func didMove(to view: SKView) {
         print("Start")
         //重力を設定
-        physicsWorld.gravity = CGVector(dx: 0.0, dy: -9.8)
+        physicsWorld.gravity = CGVector(dx: 0.0, dy: 9.8)
         physicsWorld.contactDelegate = self
         
-        baccScreenNode = SKNode()
-        addChild(baccScreenNode)
+        backScreenNode = SKSpriteNode()
+        backScreenNode.physicsBody = SKPhysicsBody()
+        addChild(backScreenNode)
         
         //背景色を設定
         //backgroundColor = UIColor(colorLiteralRed: 0.15, green: 0.75, blue: 0.90, alpha: 1)
@@ -80,7 +82,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         mame.physicsBody = SKPhysicsBody(circleOfRadius: mame.size.height / 2.0)
         
         //衝突した時に回転させない
-        mame.physicsBody?.allowsRotation = false
+        mame.physicsBody?.allowsRotation = true
+        //衝突した時に動かさない
+        mame.physicsBody?.isDynamic = false
         
         //衝突のカテゴリー設定
         mame.physicsBody?.categoryBitMask = mameCategory
@@ -100,7 +104,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         leafTexture.filteringMode = SKTextureFilteringMode.linear
         
         //テクスチャを指定してスプライトを作成する
-        let Leaf = SKSpriteNode(texture: leafTexture)
+        Leaf = SKSpriteNode(texture: leafTexture)
         
         //スプライトの位置を指定する
         Leaf.position = CGPoint(x: size.width / 2, y: size.height / 3)
@@ -112,11 +116,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         
         //衝突の時に動かないようにする
-        Leaf.physicsBody?.isDynamic = false
+        Leaf.physicsBody?.isDynamic = true
         
         //スプライトを追加する
         
-        baccScreenNode.addChild(Leaf)
+        backScreenNode.addChild(Leaf)
     }
     
     func setupKi(){
@@ -125,23 +129,35 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         kiTexture.filteringMode = SKTextureFilteringMode.nearest
         
         //スプライトを作成
-        let ki = SKSpriteNode(texture: kiTexture)
+        ki = SKSpriteNode(texture: kiTexture)
+        
         
         //スプライトの位置を指定する
         ki.position = CGPoint(x: size.width / 2, y: size.height / 2)
         ki.zPosition = -100
         
+        //物理演算を設定
+        ki.physicsBody = SKPhysicsBody(rectangleOf: kiTexture.size(), center: CGPoint(x: self.frame.size.width / 2, y: self.frame.size.height))
+        
         //シーンにスプライトを追加
-        addChild(ki)
+        backScreenNode.addChild(ki)
         
     }
     
     func mameJump(){
-        //まめくんの速度をゼロにする
-        mame.physicsBody?.velocity = CGVector.zero
+        //木の面積
+        let size_ki = ki.size.width * ki.size.height
+        //葉の面積
+        let size_leaf = Leaf.size.width * (Leaf.size.height / 10.0)
+        //木と葉の相対面積
+        let size_ki_leaf = size_ki / size_leaf
         
-        //まめくんに縦方向の力を与える
-        mame.physicsBody?.applyImpulse(CGVector(dx: 0.0, dy: 25.0))
+        //スクロールの速度をゼロにする
+        Leaf.physicsBody?.velocity = CGVector.zero
+        ki.physicsBody?.velocity = CGVector.zero
+        //スクロールに縦方向の力を与える
+        Leaf.physicsBody?.applyImpulse(CGVector(dx: 0.0, dy: -25.0))
+        ki.physicsBody?.applyImpulse(CGVector(dx: 0.0, dy: -25.0 * size_ki_leaf))
     }
     
     
