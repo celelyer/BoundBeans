@@ -13,8 +13,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var mame:SKSpriteNode!
     var backScreenNode:SKSpriteNode!
     var Leaf:SKSpriteNode!
+    var Leaf2:SKSpriteNode!
     var ki:SKSpriteNode!
+    var ki2:SKSpriteNode!
     var scrollNode:SKNode!
+    var scrollNode2:SKNode!
     
     //衝突判定カテゴリー
     let mameCategory: UInt32 = 1 << 0
@@ -29,9 +32,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         physicsWorld.gravity = CGVector(dx: 0.0, dy: 9.8)
         physicsWorld.contactDelegate = self
         
-        backScreenNode = SKSpriteNode()
-        backScreenNode.physicsBody = SKPhysicsBody()
-        addChild(backScreenNode)
+        
         
         //背景色を設定
         //backgroundColor = UIColor(colorLiteralRed: 0.15, green: 0.75, blue: 0.90, alpha: 1)
@@ -40,6 +41,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         setupKi()
         setupLeaf()
         setupBean()
+        
+        //setKi()
+        //setLeaf()
         
     }
     
@@ -80,9 +84,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         //スプライトを作成
         mame = SKSpriteNode(texture: mameTexture)
         mame.position = CGPoint(x: self.frame.size.width * 0.5, y: self.frame.size.height * 0.7)
-        
+        mame.zPosition = 200
         //物理演算を設定
         mame.physicsBody = SKPhysicsBody(circleOfRadius: mame.size.height / 2.0)
+        mame.physicsBody?.mass = 100
         
         //衝突した時に回転させる
         mame.physicsBody?.allowsRotation = true
@@ -111,7 +116,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         Leaf = SKSpriteNode(texture: leafTexture)
         
         //スプライトの位置を指定する
-        Leaf.position = CGPoint(x: self.frame.size.width / 2, y: self.frame.size.height / 3)
+        //Leaf.position = CGPoint(x: self.frame.size.width / 2, y: self.frame.size.height / 3)
+        Leaf.position = CGPoint(x: 0.0, y: 0.0)
         
         //物理演算を設定
         Leaf.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: leafTexture.size().width, height: leafTexture.size().height / 10))
@@ -122,17 +128,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         //衝突の時に動かないようにする
         Leaf.physicsBody?.isDynamic = true
         //衝突の時に回らないようにする
-        Leaf.physicsBody?.allowsRotation = true
+        Leaf.physicsBody?.allowsRotation = false
         //質量を１に設定(木と同じ)
-        Leaf.physicsBody?.mass = 0.07
+        Leaf.physicsBody?.mass = 0.0001
         
         //親ノードにピン留
-        Leaf.physicsBody?.pinned = false
+        Leaf.physicsBody?.pinned = true
         
         
         //スプライトを追加する
-        
-        backScreenNode.addChild(Leaf)
+        ki.addChild(Leaf)
     }
     
     func setLeaf(){ //画面外に設置する
@@ -141,31 +146,30 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         leafTexture.filteringMode = SKTextureFilteringMode.linear
         
         //テクスチャを指定してスプライトを作成する
-        Leaf = SKSpriteNode(texture: leafTexture)
+        Leaf2 = SKSpriteNode(texture: leafTexture)
         
         //スプライトの位置を指定する
-        Leaf.position = CGPoint(x: self.frame.size.width / 2, y: self.frame.size.height / 3 - self.frame.size.height)
+        Leaf2.position = CGPoint(x: self.frame.size.width / 2, y: self.frame.size.height / 3 - self.frame.size.height)
         
         //物理演算を設定
-        Leaf.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: leafTexture.size().width, height: leafTexture.size().height / 10))
-        Leaf.physicsBody?.categoryBitMask = leafCategory
-        Leaf.physicsBody?.contactTestBitMask = mameCategory
+        Leaf2.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: leafTexture.size().width, height: leafTexture.size().height / 10))
+        Leaf2.physicsBody?.categoryBitMask = leafCategory
+        Leaf2.physicsBody?.contactTestBitMask = mameCategory
         
         
         //衝突の時に動かないようにする
-        Leaf.physicsBody?.isDynamic = true
+        Leaf2.physicsBody?.isDynamic = true
         //衝突の時に回らないようにする
-        Leaf.physicsBody?.allowsRotation = true
+        Leaf2.physicsBody?.allowsRotation = false
         //質量を１に設定(木と同じ)
-        Leaf.physicsBody?.mass = 0.07
+        Leaf2.physicsBody?.mass = 0.0
         
-        //親ノードにピン留
-        Leaf.physicsBody?.pinned = false
+        //親ノードにピン留(親ノードの中心座標を原点とする)
+        Leaf2.physicsBody?.pinned = false
         
         
         //スプライトを追加する
-        
-        backScreenNode.addChild(Leaf)
+        addChild(Leaf2)
     }
     
     func setupKi(){
@@ -186,19 +190,23 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         //質量を設定(葉と同じ)
         ki.physicsBody?.mass = 0.07
         
+        ki.physicsBody?.allowsRotation = false //回転しないようにする
+        
         //次の画面を用意するための判定
         scrollNode = SKNode()
-        scrollNode.position = CGPoint(x: self.frame.size.width / 2, y: self.frame.size.height / 2)
+        //scrollNode.position = CGPoint(x: self.frame.size.width / 2, y: self.frame.size.height / 2)
+        scrollNode.position = CGPoint(x: 0.0, y: -kiTexture.size().height * 0.25)
         scrollNode.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: self.frame.width * 2, height: 1.0))
         scrollNode.physicsBody?.categoryBitMask = self.scrollCategory
         scrollNode.physicsBody?.contactTestBitMask = self.mameCategory
-        scrollNode.physicsBody?.mass = 0.07
+        scrollNode.physicsBody?.mass = 0.0001
         
-        
+        //ピン留
+        scrollNode.physicsBody?.pinned = true
         
         //シーンにスプライトを追加
-        backScreenNode.addChild(ki)
-        backScreenNode.addChild(scrollNode)
+        addChild(ki)
+        ki.addChild(scrollNode)
     }
     
     func setKi(){ //画面外に木を設置
@@ -207,31 +215,33 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         kiTexture.filteringMode = SKTextureFilteringMode.nearest
         
         //スプライトを作成
-        ki = SKSpriteNode(texture: kiTexture)
+        ki2 = SKSpriteNode(texture: kiTexture)
         
         
         //スプライトの位置を指定する
-        ki.position = CGPoint(x: self.frame.size.width / 2, y: self.frame.size.height / 2 - self.frame.size.height)
-        ki.zPosition = -100
+        ki2.position = CGPoint(x: self.frame.size.width / 2, y: self.frame.size.height / 2 - kiTexture.size().height * 0.5)
+        ki2.zPosition = -100
         
         //物理演算を設定
-        ki.physicsBody = SKPhysicsBody(rectangleOf: kiTexture.size(), center: CGPoint(x: self.frame.size.width / 2, y: self.frame.size.height))
+        ki2.physicsBody = SKPhysicsBody(rectangleOf: kiTexture.size(), center: CGPoint(x: self.frame.size.width / 2, y: self.frame.size.height))
         //質量を設定(葉と同じ)
-        ki.physicsBody?.mass = 0.07
+        ki2.physicsBody?.mass = 0.07
+        
+        ki2.physicsBody?.allowsRotation = false //回転しないようにする
         
         //次の画面を用意するための判定
-        scrollNode = SKNode()
-        scrollNode.position = CGPoint(x: self.frame.size.width / 2, y: self.frame.size.height / 2)
-        scrollNode.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: self.frame.width * 2, height: 1.0))
-        scrollNode.physicsBody?.categoryBitMask = self.scrollCategory
-        scrollNode.physicsBody?.contactTestBitMask = self.mameCategory
-        scrollNode.physicsBody?.mass = 0.07
+        scrollNode2 = SKNode()
+        scrollNode2.position = CGPoint(x: self.frame.size.width / 2, y: self.frame.size.height / 2)
+        scrollNode2.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: self.frame.width * 2, height: 1.0))
+        scrollNode2.physicsBody?.categoryBitMask = self.scrollCategory
+        scrollNode2.physicsBody?.contactTestBitMask = self.mameCategory
+        scrollNode2.physicsBody?.mass = 0.07
         
         
         
         //シーンにスプライトを追加
-        backScreenNode.addChild(ki)
-        backScreenNode.addChild(scrollNode)
+        addChild(ki2)
+        addChild(scrollNode2)
     }
     
     
@@ -245,13 +255,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.mame?.run(goback)
         
         //スクロールの速度をゼロにする
-        Leaf.physicsBody?.velocity = CGVector.zero
         ki.physicsBody?.velocity = CGVector.zero
-        scrollNode.physicsBody?.velocity = CGVector.zero
-        //スクロールに縦方向の力を与える
-        Leaf.physicsBody?.applyImpulse(CGVector(dx: 0.0, dy: -25.0))
-        ki.physicsBody?.applyImpulse(CGVector(dx: 0.0, dy: -25.5))
-        scrollNode.physicsBody?.applyImpulse(CGVector(dx: 0.0, dy: -25.5))
+
+        
+        ki.physicsBody?.applyImpulse(CGVector(dx: 0.0, dy: -30.0))
+
     }
     
     
@@ -260,6 +268,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         print("contact")
         
         if (contact.bodyA.categoryBitMask & leafCategory) == leafCategory || (contact.bodyB.categoryBitMask & leafCategory) == leafCategory { //まめくんが葉と衝突した時
+            print("jump")
             mameJump()
         }else if (contact.bodyA.categoryBitMask & scrollCategory) == scrollCategory || (contact.bodyB.categoryBitMask & scrollCategory) == scrollCategory { //まめくんがスクロール判定を通過した時
             print("scroll")
