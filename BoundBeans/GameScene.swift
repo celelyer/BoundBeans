@@ -117,6 +117,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         //衝突の時に動かないようにする
         Leaf.physicsBody?.isDynamic = true
+        //質量を１に設定(木と同じ)
+        Leaf.physicsBody?.mass = 0.07
         
         //スプライトを追加する
         
@@ -138,6 +140,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         //物理演算を設定
         ki.physicsBody = SKPhysicsBody(rectangleOf: kiTexture.size(), center: CGPoint(x: self.frame.size.width / 2, y: self.frame.size.height))
+        //質量を設定(葉と同じ)
+        ki.physicsBody?.mass = 0.07
         
         //シーンにスプライトを追加
         backScreenNode.addChild(ki)
@@ -146,18 +150,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func mameJump(){
         //木の面積
-        let size_ki = ki.size.width * ki.size.height
+        //let size_ki = ki.size.width * ki.size.height
         //葉の面積
-        let size_leaf = Leaf.size.width * (Leaf.size.height / 10.0)
+        //let size_leaf = Leaf.size.width * (Leaf.size.height / 10.0)
         //木と葉の相対面積
-        let size_ki_leaf = size_ki / size_leaf
+        //let size_ki_leaf = size_ki / size_leaf
         
         //スクロールの速度をゼロにする
         Leaf.physicsBody?.velocity = CGVector.zero
         ki.physicsBody?.velocity = CGVector.zero
         //スクロールに縦方向の力を与える
         Leaf.physicsBody?.applyImpulse(CGVector(dx: 0.0, dy: -25.0))
-        ki.physicsBody?.applyImpulse(CGVector(dx: 0.0, dy: -25.0 * size_ki_leaf))
+        ki.physicsBody?.applyImpulse(CGVector(dx: 0.0, dy: -25.0/* * size_ki_leaf*/))
     }
     
     
