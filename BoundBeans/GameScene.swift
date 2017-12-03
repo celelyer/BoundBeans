@@ -11,7 +11,7 @@ import SpriteKit
 class GameScene: SKScene, SKPhysicsContactDelegate {
     
     var mame:SKSpriteNode!
-    var leafNode:SKNode!
+    var baccScreenNode:SKNode!
     
     
     //衝突判定カテゴリー
@@ -26,11 +26,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         physicsWorld.gravity = CGVector(dx: 0.0, dy: -9.8)
         physicsWorld.contactDelegate = self
         
-        leafNode = SKNode()
-        addChild(leafNode)
+        baccScreenNode = SKNode()
+        addChild(baccScreenNode)
         
         //背景色を設定
-        backgroundColor = UIColor(colorLiteralRed: 0.15, green: 0.75, blue: 0.90, alpha: 1)
+        //backgroundColor = UIColor(colorLiteralRed: 0.15, green: 0.75, blue: 0.90, alpha: 1)
+        backgroundColor = UIColor(red: 0.15, green: 0.75, blue: 0.90, alpha: 1)
         
         setupLeaf()
         setupBean()
@@ -115,7 +116,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         //スプライトを追加する
         
-        leafNode.addChild(Leaf)
+        baccScreenNode.addChild(Leaf)
     }
     
     func setupKi(){
