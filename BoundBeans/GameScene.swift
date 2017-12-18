@@ -13,10 +13,20 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     var myButton: UIButton!
     
+    var play = 0
+    
     var scrollCount: CGFloat = 0.0
     var leafNo: CGFloat = 0.0
     var kiNo: CGFloat = 0.0
     var deletecount: CGFloat = 0.0
+    var deleteNo: CGFloat = 0.0
+    
+    var health = 0
+    var healthLabelNode:SKLabelNode!
+    var pointLabelNode:SKLabelNode!
+    var bestScoreLabelNode:SKLabelNode!
+    var point = 0
+    let userDefaults:UserDefaults = UserDefaults.standard
     
     var mame:SKSpriteNode!
     var backScreenNode:SKSpriteNode!
@@ -31,11 +41,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     let scrollCategory: UInt32 = 1 << 2
     let kiCategory: UInt32 = 1 << 3
     let deleteCategory: UInt32 = 1 << 4
+    let backScreenCategory: UInt32 = 1 << 5
     
     //SKView上にシーンが表示された時に呼ばれるメソッド
     override func didMove(to view: SKView) {
         // Buttonを生成する.
         myButton = UIButton()
+        play = 0
         
         // ボタンのサイズ.
         let bWidth: CGFloat = 200
@@ -78,7 +90,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     @objc func onClickMyButton(sender : UIButton){
         myButton.removeFromSuperview()
-        
+        play = 1
         print("Start")
         //重力を設定
         physicsWorld.gravity = CGVector(dx: 0.0, dy: 9.8)
@@ -94,13 +106,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         backScreenNode.physicsBody?.isDynamic = true
         backScreenNode.physicsBody?.allowsRotation = false
         backScreenNode.physicsBody?.linearDamping = 0.3
+        backScreenNode.physicsBody?.categoryBitMask = backScreenCategory
+        backScreenNode.physicsBody?.contactTestBitMask = deleteCategory
+        backScreenNode.name = "BackScreen"
         addChild(backScreenNode)
+        
         
         deleteNode = SKNode()
         deleteNode.position = CGPoint(x: self.frame.size.width / 2, y: self.frame.size.height * 10)
         deleteNode.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: self.frame.size.width, height: self.frame.size.height))
         deleteNode.physicsBody?.categoryBitMask = deleteCategory
         deleteNode.physicsBody?.contactTestBitMask = kiCategory | leafCategory
+        deleteNode.physicsBody?.collisionBitMask = mameCategory
         deleteNode.physicsBody?.isDynamic = false
         deleteNode.name = "delete"
         addChild(deleteNode)
@@ -109,15 +126,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         firstleaf()
         setupLeaf()
         setupBean()
+        setupLabel()
     }
     
     
     //画面をタップした時に呼ばれるメソッド
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         print("Tap")
+        
+        if play == 0 {
+            return
+        }
         mameJump()
-        
-        
         
          //複数本の指でタッチした場合も想定されるので、その中から指一本分の座標データを取得
         if let touch = touches.first{
@@ -173,7 +193,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func setupLeaf(){
-        leafNo = leafNo + 1
+        leafNo = leafNo + 1.0
         //葉の画像を読み込む
         let leafTexture = SKTexture(imageNamed: "Leaf_1")
         leafTexture.filteringMode = SKTextureFilteringMode.linear
@@ -239,7 +259,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         Leaf.physicsBody?.allowsRotation = false
         //質量を１に設定(木と同じ)
         Leaf.physicsBody?.mass = 0.0001
-        Leaf.name = "leaf1.0"
+        Leaf.name = "leaf!!!"
         
         
         //親ノードにピン留
@@ -253,7 +273,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
     
     func setupKi(){
-        kiNo = kiNo + 1
+        kiNo = kiNo + 1.0
         
         //豆の木の画像を読み込む
         let kiTexture = SKTexture(imageNamed: "mamenoki")
@@ -288,6 +308,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             scrollNode.physicsBody?.categoryBitMask = self.scrollCategory
             scrollNode.physicsBody?.contactTestBitMask = self.mameCategory
             scrollNode.physicsBody?.mass = 0.00001
+            scrollNode.name = "scroll\(scrollCount)"
             
             //ピン留
             scrollNode.physicsBody?.pinned = true
@@ -302,19 +323,50 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
     }
     
-
+    func setKi(){
+        kiNo = kiNo + 1.0
+        
+        //豆の木の画像を読み込む
+        let kiTexture = SKTexture(imageNamed: "mamenoki")
+        kiTexture.filteringMode = SKTextureFilteringMode.nearest
+        
+        //スプライトを作成
+            ki = SKSpriteNode(texture: kiTexture)
+            ki.position = CGPoint(x: 0.0, y: -scrollCount * ki.size.height)
+            ki.zPosition = -100
+            scrollCount = scrollCount + 1
+            //物理演算を設定
+            ki.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: 0.0001, height: 0.0001))
+            
+            //質量を設定(葉と同じ)
+            ki.physicsBody?.mass = 0.00001
+            ki.physicsBody?.allowsRotation = false //回転しないようにする
+            ki.physicsBody?.pinned = true
+            ki.physicsBody?.categoryBitMask = self.kiCategory
+            ki.name = "ki\(kiNo)"
+            
+            backScreenNode.addChild(ki)
+            
+            //次の画面を用意するための判定
+            scrollNode = SKNode()
+            //scrollNode.position = CGPoint(x: self.frame.size.width / 2, y: self.frame.size.height / 2)
+            scrollNode.position = CGPoint(x: 0.0, y: -scrollCount * ki.size.height - (ki.size.height * 0.25))
+            scrollNode.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: self.frame.width * 2, height: 1.0))
+            scrollNode.physicsBody?.categoryBitMask = self.scrollCategory
+            scrollNode.physicsBody?.contactTestBitMask = self.mameCategory
+            scrollNode.physicsBody?.mass = 0.00001
+            scrollNode.name = "scroll\(scrollCount)"
+            
+            //ピン留
+            scrollNode.physicsBody?.pinned = true
+            
+            //シーンにスプライトを追加
+            backScreenNode.addChild(scrollNode)
+        
+    }
     
     
     func mameJump(){
-        //まめくんが跳ねないようにする
-        //mame.physicsBody?.velocity = CGVector.zero
-        //まめくんがちょっと跳ねる初期の高さに戻る
-        /*
-        let goback_up = SKAction.moveTo(y: self.frame.height * 0.73, duration: 0.5)
-        let goback_down = SKAction.moveTo(y: self.frame.height * 0.70, duration: 0.5)
-        let goback = SKAction.sequence([goback_up, goback_down])
-        self.mame?.run(goback)
-        */
         //スクロールの速度をゼロにする
         backScreenNode.physicsBody?.velocity = CGVector.zero
 
@@ -323,6 +375,34 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
     }
     
+    func setupLabel(){
+        health = 10
+        healthLabelNode = SKLabelNode()
+        healthLabelNode.fontColor = UIColor.black
+        healthLabelNode.position = CGPoint(x: 10, y: self.frame.size.height - 30)
+        healthLabelNode.zPosition = 500
+        healthLabelNode.horizontalAlignmentMode = SKLabelHorizontalAlignmentMode.left
+        healthLabelNode.text = "\(health)"
+        
+        pointLabelNode = SKLabelNode()
+        pointLabelNode.fontColor = UIColor.black
+        pointLabelNode.position = CGPoint(x: 10, y: self.frame.size.height - 60)
+        pointLabelNode.zPosition = 500
+        pointLabelNode.horizontalAlignmentMode = SKLabelHorizontalAlignmentMode.left
+        pointLabelNode.text = "\(point)m"
+        
+        bestScoreLabelNode = SKLabelNode()
+        bestScoreLabelNode.fontColor = UIColor.black
+        bestScoreLabelNode.position = CGPoint(x: 10, y: self.frame.size.height - 90)
+        bestScoreLabelNode.zPosition = 500
+        bestScoreLabelNode.horizontalAlignmentMode = SKLabelHorizontalAlignmentMode.left
+        let bestScore = userDefaults.integer(forKey: "BEST")
+        bestScoreLabelNode.text = "Best:\(bestScore)m"
+        
+        self.addChild(healthLabelNode)
+        self.addChild(pointLabelNode)
+        self.addChild(bestScoreLabelNode)
+    }
     
     //SKPhysicsContactDelegateのメソッド。衝突した時に呼ばれる
     func didBegin(_ contact: SKPhysicsContact) {
@@ -331,29 +411,73 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
         print("bodyA:\(contact.bodyA)")
         print("bodyB:\(contact.bodyB)")
+        
+
         if (contact.bodyA.categoryBitMask & deleteCategory) == deleteCategory || (contact.bodyB.categoryBitMask & deleteCategory) == deleteCategory{ //削除判定
-            print("delete\(contact.bodyB)")
-            if (contact.bodyA.categoryBitMask & deleteCategory) == deleteCategory { //スクロール判定を消す
-                contact.bodyB.node?.removeFromParent() //bodyAがdeleteNodeならbodyBを消す
+            
+            print("contant!_bodyA:\(String(describing: contact.bodyA.node?.name))_bodyB:\(String(describing: contact.bodyB.node?.name))")
+            if (contact.bodyA.categoryBitMask & deleteCategory) == deleteCategory{
+                let deletename = (contact.bodyB.node?.name)!
+                if deletename == "leaf!!!" {
+                    deleteNode.removeFromParent()
+                    deleteNode = SKNode()
+                    deleteNode.position = CGPoint(x: self.frame.size.width / 2, y: self.frame.size.height * 8)
+                    deleteNode.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: self.frame.size.width, height: self.frame.size.height))
+                    deleteNode.physicsBody?.categoryBitMask = deleteCategory
+                    deleteNode.physicsBody?.contactTestBitMask = kiCategory | leafCategory
+                    deleteNode.physicsBody?.collisionBitMask = mameCategory
+                    deleteNode.physicsBody?.isDynamic = false
+                    deleteNode.name = "delete"
+                    addChild(deleteNode)
+                    print("deleteNodemoving")
+                }
+                backScreenNode.childNode(withName: deletename)?.removeFromParent()
             }else{
-                contact.bodyA.node?.removeFromParent()
+                let deletename = (contact.bodyA.node?.name)!
+                if deletename == "leaf!!!" {
+                    deleteNode.removeFromParent()
+                    deleteNode = SKNode()
+                    deleteNode.position = CGPoint(x: self.frame.size.width / 2, y: self.frame.size.height * 8)
+                    deleteNode.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: self.frame.size.width, height: self.frame.size.height))
+                    deleteNode.physicsBody?.categoryBitMask = deleteCategory
+                    deleteNode.physicsBody?.contactTestBitMask = kiCategory | leafCategory
+                    deleteNode.physicsBody?.collisionBitMask = mameCategory
+                    deleteNode.physicsBody?.isDynamic = false
+                    deleteNode.name = "delete"
+                    addChild(deleteNode)
+                    print("deleteNodemoving")
+                }
+                backScreenNode.childNode(withName: deletename)?.removeFromParent()
             }
         }else if (contact.bodyA.categoryBitMask & scrollCategory) == scrollCategory || (contact.bodyB.categoryBitMask & scrollCategory) == scrollCategory { //まめくんがスクロール判定を通過した時
             print("contact:scroll")
+            print("pointUp")
+            point += 1
+            pointLabelNode.text = "\(point)m"
+            var bestScore = userDefaults.integer(forKey: "BEST")
+            if point > bestScore {
+                bestScore = point
+                bestScoreLabelNode.text = "Best:\(bestScore)m"
+                userDefaults.set(bestScore, forKey: "BEST")
+                userDefaults.synchronize()
+            }
+            
             if (contact.bodyA.categoryBitMask & scrollCategory) == scrollCategory { //スクロール判定を消す
                 contact.bodyA.node?.removeFromParent()
                 contact.bodyA.node?.removeAllChildren()
-                setupKi()
+                setKi()
                 setupLeaf()
             }else{
                 contact.bodyB.node?.removeFromParent()
                 contact.bodyB.node?.removeAllChildren()
-                setupKi()
+                setKi()
                 setupLeaf()
             }
         }else if (contact.bodyA.categoryBitMask & leafCategory) == leafCategory || (contact.bodyB.categoryBitMask & leafCategory) == leafCategory { //まめくんが葉と衝突した時
             print("contact:leaf")
             mameJump()
+            health -= 1
+            healthLabelNode.text = "\(health)"
         }
             
     }
