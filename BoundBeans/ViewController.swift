@@ -8,20 +8,46 @@
 
 import UIKit
 import SpriteKit
+import GoogleMobileAds
 
 class ViewController: UIViewController {
 
+    let AdMobID = "pub-7104461095653608"
+    let TEST_ID = "ca-app-pub-7104461095653608/4327885800"
+    
+    let BoundBeans:Bool = false
+    
     override func viewDidLoad() {
         super.viewDidLoad()
     
+        print("Google Mobile Ads SDK version: \(GADRequest.sdkVersion())")
+        
+        var admobView = GADBannerView()
+        
+        admobView = GADBannerView(adSize:kGADAdSizeBanner)
+        admobView.frame.origin = CGPoint(x:0, y:self.view.frame.size.height - admobView.frame.height)
+        admobView.frame.size = CGSize(width:self.view.frame.width, height:admobView.frame.height)
+        
+        if BoundBeans {
+            admobView.adUnitID = "ca-app-pub-7104461095653608/4327885800"
+        }
+        else{
+            admobView.adUnitID = AdMobID
+        }
+        
+        admobView.rootViewController = self
+        admobView.load(GADRequest())
+        
+        self.view.addSubview(admobView)
+        
         //SKViewに型を変換する
         let skView = self.view as! SKView
         
         //FPSを表示する
-        skView.showsFPS = true
+        skView.showsFPS = false
         
         //ノードの数を表示する
-        skView.showsNodeCount = true
+        skView.showsNodeCount = false
         
         //ビューと同じサイズでシーンを作成する
         let scene = GameScene(size:skView.frame.size)

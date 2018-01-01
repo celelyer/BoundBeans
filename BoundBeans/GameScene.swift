@@ -1,15 +1,27 @@
 //
 //  GameScene.swift
 //  BoundBeans
-//
+// アプリID:ca-app-pub-7104461095653608~3383960487
 //  Created by セロラー on 2017/11/27.
 //  Copyright © 2017年 mikiya.tadano. All rights reserved.
 //
 
 import SpriteKit
 import UIKit
+import GoogleMobileAds
+import AVFoundation
 
 class GameScene: SKScene, SKPhysicsContactDelegate {
+    
+    var ImageView: UIImageView!
+    
+    let AdMobID = "pub-7104461095653608"
+    let TEST_ID = "ca-app-pub-7104461095653608~3383960487"
+    
+    let DEVICE_ID = "61b0154xxxxxxxxxxxxxxxxxxxxxxxe0"
+    
+    
+    let AdMobTest:Bool = false
     
     var myButton: UIButton!
     
@@ -42,9 +54,71 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     let kiCategory: UInt32 = 1 << 3
     let deleteCategory: UInt32 = 1 << 4
     let backScreenCategory: UInt32 = 1 << 5
-    
+
+    var audioPlayerInstance : AVAudioPlayer! = nil  // 再生するサウンドのインスタンス
+    var audioPlayerInstance2 : AVAudioPlayer! = nil  // 再生するサウンドのインスタンス
     //SKView上にシーンが表示された時に呼ばれるメソッド
     override func didMove(to view: SKView) {
+        
+        let imageWidth: CGFloat = UIScreen.main.bounds.width  //横幅
+        let imageheight: CGFloat = UIScreen.main.bounds.height  //横幅
+        
+        // UIImageViewという画像を表示させる画面を作る
+        ImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: imageWidth, height: imageheight)) //BoundSize_wは375.0と同じ、BoundSize_hは667.0と同じ
+        
+        
+        // 画像をUIImageViewの画像を表示させるメソッド(.image)に入れる
+        ImageView.image = UIImage(named: "openning")  //(named:"ここに画像ファイル名")
+        
+        // 画像の表示する座標を指定する.
+        ImageView.layer.position = CGPoint(x: imageWidth/2, y:imageheight/2)
+        
+        // 画像を表示させる画面（UIImageView）を画面 (View)に追加する.
+        view.addSubview(ImageView)
+        
+        let soundFilePath = Bundle.main.path(forResource: "intro", ofType: "mp3")!
+        let sound:URL = URL(fileURLWithPath: soundFilePath)
+        // AVAudioPlayerのインスタンスを作成
+        do {
+            audioPlayerInstance = try AVAudioPlayer(contentsOf: sound, fileTypeHint:nil)
+        } catch {
+            print("AVAudioPlayerインスタンス作成失敗")
+        }
+        // バッファに保持していつでも再生できるようにする
+        audioPlayerInstance.prepareToPlay()
+        
+        let soundFilePath2 = Bundle.main.path(forResource: "BoundBeans", ofType: "mp3")!
+        let sound2:URL = URL(fileURLWithPath: soundFilePath2)
+        // AVAudioPlayerのインスタンスを作成
+        do {
+            audioPlayerInstance2 = try AVAudioPlayer(contentsOf: sound2, fileTypeHint:nil)
+        } catch {
+            print("AVAudioPlayerインスタンス作成失敗")
+        }
+        // バッファに保持していつでも再生できるようにする
+        audioPlayerInstance2.prepareToPlay()
+        audioPlayerInstance2.numberOfLoops = -1
+        
+        print("Google Mobile Ads SDK version: \(GADRequest.sdkVersion())")
+        
+        var admobView = GADBannerView()
+        
+        admobView = GADBannerView(adSize:kGADAdSizeBanner)
+        admobView.frame.origin = CGPoint(x:0, y:(self.view?.frame.size.height)! - admobView.frame.height)
+        admobView.frame.size = CGSize(width:(self.view?.frame.width)!, height:admobView.frame.height)
+        
+        if AdMobTest {
+            admobView.adUnitID = "ca-app-pub-3940256099942544/2934735716"
+        }
+        else{
+            admobView.adUnitID = AdMobID
+        }
+        
+        //admobView.rootViewController = self
+        admobView.load(GADRequest())
+        
+        self.view?.addSubview(admobView)
+        
         // Buttonを生成する.
         myButton = UIButton()
         play = 0
@@ -90,6 +164,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     @objc func onClickMyButton(sender : UIButton){
         myButton.removeFromSuperview()
+        ImageView.removeFromSuperview()
         play = 1
         print("Start")
         //重力を設定
@@ -123,6 +198,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         deleteNode.name = "delete"
         addChild(deleteNode)
         
+        //BGM設定
+        
+        //audioPlayerInstance.play()
+        audioPlayerInstance2.play()
         
         setupKi()
         firstleaf()
@@ -153,6 +232,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             removeAllChildren()
             
             play = 1
+            audioPlayerInstance2.stop()
+            audioPlayerInstance2.play()
             print("Start")
             //重力を設定
             physicsWorld.gravity = CGVector(dx: 0.0, dy: 9.8)
@@ -199,7 +280,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         if let touch = touches.first{
             //スクリーン上の座標データをlocationNodeメソッドでシーン上での座標に変換
             let location = touch.location(in: self)
-            let action = SKAction.moveTo(x: location.x, duration:1.0)
+            let action = SKAction.moveTo(x: location.x, duration:0.5)
             mame.run(action)
         }
         
@@ -209,7 +290,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         if let touch = touches.first{
             let location = touch.location(in: self)
-            let action = SKAction.moveTo(x: location.x, duration: 1.0)
+            let action = SKAction.moveTo(x: location.x, duration: 0.5)
             self.mame?.run(action)
         }
     }
@@ -399,7 +480,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         Leaf.zPosition = 100
         
         //物理演算を設定
-        Leaf.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: leafTexture.size().width / 0.7, height: leafTexture.size().height / 10))
+        Leaf.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: leafTexture.size().width * 0.5, height: leafTexture.size().height / 10))
         Leaf.physicsBody?.categoryBitMask = leafCategory
         Leaf.physicsBody?.contactTestBitMask = mameCategory
         

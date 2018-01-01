@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		64F88EBEF963396360D66560 /* Pods_BoundBeans.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 320191D7BA5C4E9F4A3788CF /* Pods_BoundBeans.framework */; };
 		A52376381FCC3E5A0030CBB1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A52376371FCC3E5A0030CBB1 /* AppDelegate.swift */; };
 		A523763A1FCC3E5A0030CBB1 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A52376391FCC3E5A0030CBB1 /* ViewController.swift */; };
 		A523763D1FCC3E5A0030CBB1 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A523763B1FCC3E5A0030CBB1 /* Main.storyboard */; };
@@ -14,9 +15,16 @@
 		A52376421FCC3E5A0030CBB1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A52376401FCC3E5A0030CBB1 /* LaunchScreen.storyboard */; };
 		A523764B1FCC3E860030CBB1 /* SpriteKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A523764A1FCC3E860030CBB1 /* SpriteKit.framework */; };
 		A523764D1FCC44E60030CBB1 /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = A523764C1FCC44E60030CBB1 /* GameScene.swift */; };
+		A53678161FECD37A00ECA38A /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A53678151FECD37A00ECA38A /* GoogleService-Info.plist */; };
+		A53678181FEE7BBA00ECA38A /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A53678171FEE7BBA00ECA38A /* AVFoundation.framework */; };
+		A536781B1FEE7E4500ECA38A /* BoundBeans.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = A53678191FEE7E4500ECA38A /* BoundBeans.mp3 */; };
+		A536781C1FEE7E4500ECA38A /* intro.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = A536781A1FEE7E4500ECA38A /* intro.mp3 */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		320191D7BA5C4E9F4A3788CF /* Pods_BoundBeans.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BoundBeans.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		3ED35EC39251ABBA77A937F7 /* Pods-BoundBeans.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BoundBeans.release.xcconfig"; path = "Pods/Target Support Files/Pods-BoundBeans/Pods-BoundBeans.release.xcconfig"; sourceTree = "<group>"; };
+		93C87E55083462604BD60E9B /* Pods-BoundBeans.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BoundBeans.debug.xcconfig"; path = "Pods/Target Support Files/Pods-BoundBeans/Pods-BoundBeans.debug.xcconfig"; sourceTree = "<group>"; };
 		A52376341FCC3E5A0030CBB1 /* BoundBeans.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BoundBeans.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A52376371FCC3E5A0030CBB1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A52376391FCC3E5A0030CBB1 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -26,6 +34,10 @@
 		A52376431FCC3E5A0030CBB1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A523764A1FCC3E860030CBB1 /* SpriteKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SpriteKit.framework; path = System/Library/Frameworks/SpriteKit.framework; sourceTree = SDKROOT; };
 		A523764C1FCC44E60030CBB1 /* GameScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
+		A53678151FECD37A00ECA38A /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		A53678171FEE7BBA00ECA38A /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		A53678191FEE7E4500ECA38A /* BoundBeans.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = BoundBeans.mp3; sourceTree = "<group>"; };
+		A536781A1FEE7E4500ECA38A /* intro.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = intro.mp3; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -33,7 +45,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A53678181FEE7BBA00ECA38A /* AVFoundation.framework in Frameworks */,
 				A523764B1FCC3E860030CBB1 /* SpriteKit.framework in Frameworks */,
+				64F88EBEF963396360D66560 /* Pods_BoundBeans.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -46,6 +60,7 @@
 				A52376361FCC3E5A0030CBB1 /* BoundBeans */,
 				A52376351FCC3E5A0030CBB1 /* Products */,
 				A52376491FCC3E860030CBB1 /* Frameworks */,
+				A55BD4170581574DA92D87B9 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -67,6 +82,9 @@
 				A523764C1FCC44E60030CBB1 /* GameScene.swift */,
 				A52376401FCC3E5A0030CBB1 /* LaunchScreen.storyboard */,
 				A52376431FCC3E5A0030CBB1 /* Info.plist */,
+				A53678151FECD37A00ECA38A /* GoogleService-Info.plist */,
+				A53678191FEE7E4500ECA38A /* BoundBeans.mp3 */,
+				A536781A1FEE7E4500ECA38A /* intro.mp3 */,
 			);
 			path = BoundBeans;
 			sourceTree = "<group>";
@@ -74,9 +92,20 @@
 		A52376491FCC3E860030CBB1 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				A53678171FEE7BBA00ECA38A /* AVFoundation.framework */,
 				A523764A1FCC3E860030CBB1 /* SpriteKit.framework */,
+				320191D7BA5C4E9F4A3788CF /* Pods_BoundBeans.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		A55BD4170581574DA92D87B9 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				93C87E55083462604BD60E9B /* Pods-BoundBeans.debug.xcconfig */,
+				3ED35EC39251ABBA77A937F7 /* Pods-BoundBeans.release.xcconfig */,
+			);
+			name = Pods;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -86,9 +115,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = A52376461FCC3E5A0030CBB1 /* Build configuration list for PBXNativeTarget "BoundBeans" */;
 			buildPhases = (
+				E5D35CF442BF739C75B1C842 /* [CP] Check Pods Manifest.lock */,
 				A52376301FCC3E5A0030CBB1 /* Sources */,
 				A52376311FCC3E5A0030CBB1 /* Frameworks */,
 				A52376321FCC3E5A0030CBB1 /* Resources */,
+				CD0A1CC89E7355BEE5A4CDA9 /* [CP] Embed Pods Frameworks */,
+				43CFEFAC63D964FAA30DA150 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -141,12 +173,71 @@
 			buildActionMask = 2147483647;
 			files = (
 				A52376421FCC3E5A0030CBB1 /* LaunchScreen.storyboard in Resources */,
+				A536781B1FEE7E4500ECA38A /* BoundBeans.mp3 in Resources */,
+				A53678161FECD37A00ECA38A /* GoogleService-Info.plist in Resources */,
 				A523763F1FCC3E5A0030CBB1 /* Assets.xcassets in Resources */,
 				A523763D1FCC3E5A0030CBB1 /* Main.storyboard in Resources */,
+				A536781C1FEE7E4500ECA38A /* intro.mp3 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		43CFEFAC63D964FAA30DA150 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-BoundBeans/Pods-BoundBeans-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		CD0A1CC89E7355BEE5A4CDA9 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-BoundBeans/Pods-BoundBeans-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/GoogleToolboxForMac/GoogleToolboxForMac.framework",
+				"${BUILT_PRODUCTS_DIR}/nanopb/nanopb.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleToolboxForMac.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/nanopb.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-BoundBeans/Pods-BoundBeans-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		E5D35CF442BF739C75B1C842 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-BoundBeans-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		A52376301FCC3E5A0030CBB1 /* Sources */ = {
@@ -288,29 +379,37 @@
 		};
 		A52376471FCC3E5A0030CBB1 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 93C87E55083462604BD60E9B /* Pods-BoundBeans.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				DEVELOPMENT_TEAM = S2K2NE624W;
 				INFOPLIST_FILE = BoundBeans/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = jp.techacademy.mikiya.tadano.BoundBeans;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
 		A52376481FCC3E5A0030CBB1 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3ED35EC39251ABBA77A937F7 /* Pods-BoundBeans.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				DEVELOPMENT_TEAM = S2K2NE624W;
 				INFOPLIST_FILE = BoundBeans/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = jp.techacademy.mikiya.tadano.BoundBeans;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};

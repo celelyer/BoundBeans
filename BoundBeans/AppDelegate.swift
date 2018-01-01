@@ -1,12 +1,13 @@
 //
 //  AppDelegate.swift
 //  BoundBeans
-//
+//  アプリID:ca-app-pub-7104461095653608~3383960487
 //  Created by セロラー on 2017/11/27.
 //  Copyright © 2017年 mikiya.tadano. All rights reserved.
 //
 
 import UIKit
+import Firebase
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -16,6 +17,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        FirebaseApp.configure()
+        // Initialize Google Mobile Ads SDK, application IDを設定
+        GADMobileAds.configure(withApplicationID: "ca-app-pub-7104461095653608~3383960487")
         return true
     }
 
